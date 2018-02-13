@@ -11,45 +11,73 @@ from guests.models import Party
 
 SAVE_THE_DATE_TEMPLATE = 'guests/email_templates/save_the_date.html'
 SAVE_THE_DATE_CONTEXT_MAP = {
-        'lions-head': {
-            'title': "Lion's Head",
+        'bar': {
+            'title': "Some Bar in Boston",
             'header_filename': 'hearts.png',
-            'main_image': 'lions-head.jpg',
-            'main_color': '#fff3e8',
-            'font_color': '#666666',
+            'main_image': 'bar.jpg',
+            'main_color': '#666666',
+            'font_color': '#ffffff',
         },
-        'ski-trip': {
-            'title': 'Ski Trip',
+        'cannon_beach': {
+            'title': 'Cannon Beach',
             'header_filename': 'hearts.png',
-            'main_image': 'ski-trip.jpg',
+            'main_image': 'cannon_beach.jpg',
             'main_color': '#330033',
             'font_color': '#ffffff',
         },
-        'canada': {
-            'title': 'Canada!',
-            'header_filename': 'maple-leaf.png',
-            'main_image': 'canada-cartoon-resized.jpg',
+        'dead_river': {
+            'title': 'Dead River',
+            'header_filename': 'hearts.png',
+            'main_image': 'dead_river.jpg',
             'main_color': '#ea2e2e',
             'font_color': '#e5ddd9',
         },
-        'american-gothic': {
-            'title': 'American Gothic',
+        'kissing': {
+            'title': 'Kissing Booth',
             'header_filename': 'hearts.png',
-            'main_image': 'american-gothic.jpg',
+            'main_image': 'kissing_booth.jpg',
             'main_color': '#b6ccb5',
             'font_color': '#000000',
         },
-        'plunge': {
-            'title': 'The Plunge',
-            'header_filename': 'plunger.png',
-            'main_image': 'plunge.jpg',
+        'petite': {
+            'title': 'Pick Me Up!',
+            'header_filename': 'hearts.png',
+            'main_image': 'petite.jpg',
             'main_color': '#b4e6ff',
             'font_color': '#000000',
         },
-        'dimagi': {
-            'title': 'Dimagi',
-            'header_filename': 'commcare.png',
-            'main_image': 'join-us.jpg',
+        'red_sox': {
+            'title': "Red Sox",
+            'header_filename': 'hearts.png',
+            'main_image': 'red_sox.jpg',
+            'main_color': '#666666',
+            'font_color': '#ffffff',
+        },
+        'ring': {
+            'title': "Ring Closeup",
+            'header_filename': 'hearts.png',
+            'main_image': 'ring.jpg',
+            'main_color': '#666666',
+            'font_color': '#ffffff',
+        },
+        'shenzhen': {
+            'title': "Learning Mandarin",
+            'header_filename': 'hearts.png',
+            'main_image': 'shenzen.jpg',
+            'main_color': '#666666',
+            'font_color': '#ffffff',
+        },
+        'sunset': {
+            'title': "Cherry Creek Sunset",
+            'header_filename': 'hearts.png',
+            'main_image': 'sunset.jpg',
+            'main_color': '#666666',
+            'font_color': '#FFFFFF',
+        },
+        'presque': {
+            'title': 'Presque Isle Walk',
+            'header_filename': 'hearts.png',
+            'main_image': 'presque_walk.jpg',
             'main_color': '#003d71',
             'font_color': '#d6d6d4',
         }
@@ -57,7 +85,7 @@ SAVE_THE_DATE_CONTEXT_MAP = {
 
 
 def send_all_save_the_dates(test_only=False, mark_as_sent=False):
-    to_send_to = Party.in_default_order().filter(is_invited=True, save_the_date_sent=None)
+    to_send_to = Party.in_default_order().filter(save_the_date_sent=None)
     for party in to_send_to:
         send_save_the_date_to_party(party, test_only=test_only)
         if mark_as_sent:
@@ -78,35 +106,26 @@ def send_save_the_date_to_party(party, test_only=False):
         )
 
 
-def get_template_id_from_party(party):
-    if party.type == 'formal':
+def get_template_id_from_party(partyType):
+    if partyType == 'family':
         # all formal guests get formal invites
         return random.choice(['lions-head', 'ski-trip'])
-    elif party.type == 'dimagi':
-        # all non-formal dimagis get dimagi invites
-        return 'dimagi'
-    elif party.type == 'fun':
-        all_options = SAVE_THE_DATE_CONTEXT_MAP.keys()
-        all_options.remove('dimagi')
-        if party.category == 'ro':
-            # don't send the canada invitation to ro's crowd
-            all_options.remove('canada')
-        # otherwise choose randomly from all options for everyone else
-        return random.choice(all_options)
     else:
-        return None
+        all_options = SAVE_THE_DATE_CONTEXT_MAP.keys()
+        return random.choice(all_options)
 
 
 def get_save_the_date_context(template_id):
     template_id = (template_id or '').lower()
     if template_id not in SAVE_THE_DATE_CONTEXT_MAP:
-        template_id = 'lions-head'
+        logger.error("How is this template not in the save the date map? {}".format(template_id))
+        template_id = get_template_id_from_party('')
     context = copy(SAVE_THE_DATE_CONTEXT_MAP[template_id])
     context['name'] = template_id
-    context['page_title'] = 'Cory and Rowena - Save the Date!'
+    context['page_title'] = 'Steve and Allie - Save the Date!'
     context['preheader_text'] = (
         "The date that you've eagerly been waiting for is finally here. "
-        "Cory and Ro are getting married! Save the date!"
+        "Steve and Allie are getting married! Save the date!"
     )
     return context
 
@@ -114,11 +133,11 @@ def get_save_the_date_context(template_id):
 def send_save_the_date_email(context, recipients, test_only=False):
     context['email_mode'] = True
     template_html = render_to_string(SAVE_THE_DATE_TEMPLATE, context=context)
-    template_text = "Save the date for Cory and Rowena's wedding! July 2, 2016. Niagata-on-the-Lake, Ontario, Canada"
+    template_text = "Save the date for Steve and Allie's wedding! August 18, 18. River Falls, WI"
     subject = 'Save the Date!'
     # https://www.vlent.nl/weblog/2014/01/15/sending-emails-with-embedded-images-in-django/
-    msg = EmailMultiAlternatives(subject, template_text, 'Cory and Rowena <hello@coryandro.com>', recipients,
-                                 reply_to=['rsvp@coryandro.com'])
+    msg = EmailMultiAlternatives(subject, template_text, 'Steve and Allie <sajarvis@bu.edu>', recipients,
+                                 reply_to=['sajarvis@bu.edu'])
     msg.attach_alternative(template_html, "text/html")
     msg.mixed_subtype = 'related'
     for filename in (context['header_filename'], context['main_image']):
@@ -128,7 +147,7 @@ def send_save_the_date_email(context, recipients, test_only=False):
             msg_img.add_header('Content-ID', '<{}>'.format(filename))
             msg.attach(msg_img)
 
-    print 'sending {} to {}'.format(context['name'], ', '.join(recipients))
+    logger.information('sending {} to {}'.format(context['name'], ', '.join(recipients)))
     if not test_only:
         msg.send()
 
