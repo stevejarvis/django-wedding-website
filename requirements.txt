@@ -1,3 +1,6 @@
+cffi
+ansible
 django==1.11
 Fabric==1.10.2
 psycopg2==2.7.1
+gunicorn==19.7.1
