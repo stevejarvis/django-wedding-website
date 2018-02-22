@@ -1,7 +1,7 @@
 {% extends 'guests/email_templates/email_base.html' %}
 {% load staticfiles %}
 {% block main_image %}
-    <a href="http://jarvis4.life/"
+    <a href="http://jarvises4.life/"
        {% if email_mode %}target="_blank"{% endif %}>
     {% with "save-the-date/images/"|add:main_image as main_static_url %}
         <img src="{% if email_mode %}cid:{{ main_image }}{% else %}{% static main_static_url %}{% endif %}"

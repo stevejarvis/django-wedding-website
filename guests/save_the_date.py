@@ -29,7 +29,7 @@ SAVE_THE_DATE_CONTEXT_MAP = {
             'title': 'Dead River',
             'header_filename': 'hearts.png',
             'main_image': 'dead_river.jpg',
-            'main_color': '#ea2e2e',
+            'main_color': '#7D26CD',
             'font_color': '#e5ddd9',
         },
         'kissing': {
