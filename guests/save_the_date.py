@@ -18,20 +18,6 @@ SAVE_THE_DATE_CONTEXT_MAP = {
             'main_color': '#666666',
             'font_color': '#ffffff',
         },
-        'cannon_beach': {
-            'title': 'Cannon Beach',
-            'header_filename': 'hearts.png',
-            'main_image': 'cannon_beach.jpg',
-            'main_color': '#330033',
-            'font_color': '#ffffff',
-        },
-        'dead_river': {
-            'title': 'Dead River',
-            'header_filename': 'hearts.png',
-            'main_image': 'dead_river.jpg',
-            'main_color': '#7D26CD',
-            'font_color': '#e5ddd9',
-        },
         'kissing': {
             'title': 'Kissing Booth',
             'header_filename': 'hearts.png',
@@ -43,15 +29,8 @@ SAVE_THE_DATE_CONTEXT_MAP = {
             'title': 'Pick Me Up!',
             'header_filename': 'hearts.png',
             'main_image': 'petite.jpg',
-            'main_color': '#b4e6ff',
+            'main_color': '#baccde',
             'font_color': '#000000',
-        },
-        'red_sox': {
-            'title': "Red Sox",
-            'header_filename': 'hearts.png',
-            'main_image': 'red_sox.jpg',
-            'main_color': '#666666',
-            'font_color': '#ffffff',
         },
         'ring': {
             'title': "Ring Closeup",
@@ -64,8 +43,8 @@ SAVE_THE_DATE_CONTEXT_MAP = {
             'title': "Learning Mandarin",
             'header_filename': 'hearts.png',
             'main_image': 'shenzen.jpg',
-            'main_color': '#666666',
-            'font_color': '#ffffff',
+            'main_color': '#c4ccd4',
+            'font_color': '#000000',
         },
         'sunset': {
             'title': "Cherry Creek Sunset",
