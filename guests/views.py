@@ -34,7 +34,7 @@ def export_guests(request):
 @login_required
 def dashboard(request):
     parties_with_pending_invites = Party.objects.filter(
-        is_invited=True, is_attending=None
+        is_attending=None,
     ).order_by('category', 'name')
     parties_with_unopen_invites = parties_with_pending_invites.filter(invitation_opened=None)
     parties_with_open_unresponded_invites = parties_with_pending_invites.exclude(invitation_opened=None)
