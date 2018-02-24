@@ -11,13 +11,6 @@ from guests.models import Party
 
 SAVE_THE_DATE_TEMPLATE = 'guests/email_templates/save_the_date.html'
 SAVE_THE_DATE_CONTEXT_MAP = {
-        'bar': {
-            'title': "Some Bar in Boston",
-            'header_filename': 'hearts.png',
-            'main_image': 'bar.jpg',
-            'main_color': '#666666',
-            'font_color': '#ffffff',
-        },
         'kissing': {
             'title': 'Kissing Booth',
             'header_filename': 'hearts.png',
