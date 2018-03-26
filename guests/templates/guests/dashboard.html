@@ -31,15 +31,15 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            {% for category in category_breakdown %}
-                            <th>{{ category.party__category }}</th>
+                            {% for relation in relation_breakdown %}
+                            <th>{{ relation.party__relation }}</th>
                             {% endfor %}
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            {% for category in category_breakdown %}
-                            <td>{{ category.count }}</td>
+                            {% for relation in relation_breakdown %}
+                            <td>{{ relation.count }}</td>
                             {% endfor %}
                         </tr>
                     </tbody>
