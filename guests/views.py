@@ -35,11 +35,11 @@ def export_guests(request):
 def dashboard(request):
     parties_with_pending_invites = Party.objects.filter(
         is_attending=None,
-    ).order_by('category', 'name')
+    ).order_by('relation', 'name')
     parties_with_unopen_invites = parties_with_pending_invites.filter(invitation_opened=None)
     parties_with_open_unresponded_invites = parties_with_pending_invites.exclude(invitation_opened=None)
     attending_guests = Guest.objects.filter(is_attending=True)
-    category_breakdown = attending_guests.values('party__category').annotate(count=Count('*'))
+    relation_breakdown = attending_guests.values('party__relation').annotate(count=Count('*'))
     return render(request, 'guests/dashboard.html', context={
         'guests': Guest.objects.filter(is_attending=True).count(),
         'possible_guests': Guest.objects.filter(party__is_invited=True).exclude(is_attending=False).count(),
@@ -50,7 +50,7 @@ def dashboard(request):
         'parties_with_open_unresponded_invites': parties_with_open_unresponded_invites,
         'unopened_invite_count': parties_with_unopen_invites.count(),
         'total_invites': Party.objects.filter(is_invited=True).count(),
-        'category_breakdown': category_breakdown,
+        'relation_breakdown': relation_breakdown,
     })
 
 
