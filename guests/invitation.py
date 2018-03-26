@@ -23,6 +23,8 @@ def guess_party_by_invite_id_or_404(invite_id):
 
 
 def get_invitation_context(party):
+    raise "Not updated for Jarvis wedding yet"
+    '''
     return {
         'title': "Lion's Head",
         'main_image': 'bride-groom.png',
@@ -33,9 +35,12 @@ def get_invitation_context(party):
         'invitation_id': party.invitation_id,
         'party': party,
     }
+    '''
 
 
 def send_invitation_email(party, test_only=False, recipients=None):
+    raise "Not updated for Jarvis wedding yet"
+    '''
     if recipients is None:
         recipients = party.guest_emails
     if not recipients:
@@ -65,10 +70,11 @@ def send_invitation_email(party, test_only=False, recipients=None):
     print 'sending invitation to {} ({})'.format(party.name, ', '.join(recipients))
     if not test_only:
         msg.send()
+    '''
 
 
 def send_all_invitations(test_only, mark_as_sent):
-    to_send_to = Party.in_default_order().filter(is_invited=True, invitation_sent=None).exclude(is_attending=False)
+    to_send_to = Party.in_default_order().filter(invitation_sent=None).exclude(is_attending=False)
     for party in to_send_to:
         send_invitation_email(party, test_only=test_only)
         if mark_as_sent:

@@ -12,53 +12,55 @@ def import_guests(path):
             if first_row:
                 first_row = False
                 continue
-            party_name, first_name, last_name, party_type, is_child, category, is_invited, email = row[:8]
+            party_name, first_name, last_name, has_plus_one, _, category, is_child, email, mailing_address = row[:9]
             if not party_name:
                 print 'skipping row {}'.format(row)
                 continue
+            # Make the party
             party = Party.objects.get_or_create(name=party_name)[0]
-            party.type = party_type
             party.category = category
-            party.is_invited = _is_true(is_invited)
             if not party.invitation_id:
-                party.invitation_id = uuid.uuid4().hex
+                party.invitation_id = party_name
             party.save()
+            # Make the guest object
             if email:
                 guest, created = Guest.objects.get_or_create(party=party, email=email)
                 guest.first_name = first_name
                 guest.last_name = last_name
             else:
                 guest = Guest.objects.get_or_create(party=party, first_name=first_name, last_name=last_name)[0]
+            guest.has_plus_one = _is_true(has_plus_one)
+            if not guest.has_plus_one:
+                guest.plus_one_attending = False
             guest.is_child = _is_true(is_child)
+            guest.home_address = mailing_address
             guest.save()
 
 
 def export_guests():
     headers = [
-        'party_name', 'first_name', 'last_name', 'party_type',
-        'is_child', 'category', 'is_invited', 'is_attending',
-        'rehearsal_dinner', 'meal', 'email', 'comments'
+        'party_name', 'first_name', 'last_name', 'plus_one', 'category',
+        'is_child', 'email', 'mailing_address', 'is_attending', 'plus_one_attending',
+        'comments'
     ]
     file = StringIO.StringIO()
     writer = csv.writer(file)
     writer.writerow(headers)
     for party in Party.in_default_order():
         for guest in party.guest_set.all():
-            if guest.is_attending:
-                writer.writerow([
-                    party.name,
-                    guest.first_name,
-                    guest.last_name,
-                    party.type,
-                    guest.is_child,
-                    party.category,
-                    party.is_invited,
-                    guest.is_attending,
-                    party.rehearsal_dinner,
-                    guest.meal,
-                    guest.email,
-                    party.comments,
-                ])
+            writer.writerow([
+                party.name,
+                guest.first_name,
+                guest.last_name,
+                guest.has_plus_one,
+                party.category,
+                guest.is_child,
+                guest.email,
+                guest.home_address,
+                guest.is_attending,
+                guest.plus_one_attending,
+                party.comments,
+            ])
     return file
 
 

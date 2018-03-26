@@ -36,20 +36,23 @@ def dashboard(request):
     parties_with_pending_invites = Party.objects.filter(
         is_attending=None,
     ).order_by('category', 'name')
-    parties_with_unopen_invites = parties_with_pending_invites.filter(invitation_opened=None)
+    parties_with_unopen_invites = Party.objects.filter(invitation_opened=None)
+    parties_with_unopen_save_the_dates = Party.objects.filter(save_the_date_opened=None)
     parties_with_open_unresponded_invites = parties_with_pending_invites.exclude(invitation_opened=None)
     attending_guests = Guest.objects.filter(is_attending=True)
+    drinking_guests = attending_guests.filter(is_child=False)
     category_breakdown = attending_guests.values('party__category').annotate(count=Count('*'))
     return render(request, 'guests/dashboard.html', context={
-        'guests': Guest.objects.filter(is_attending=True).count(),
-        'possible_guests': Guest.objects.filter(party__is_invited=True).exclude(is_attending=False).count(),
+        'guests': Guest.objects.filter(is_attending=True).count() + Guest.objects.filter(plus_one_attending=True).count(),
+        'possible_guests': Guest.objects.filter(is_attending=None).count() + Guest.objects.filter(Q(has_plus_one=True) & ~Q(plus_one_attending=False)).count(),
         'not_coming_guests': Guest.objects.filter(is_attending=False).count(),
         'pending_invites': parties_with_pending_invites.count(),
-        'pending_guests': Guest.objects.filter(party__is_invited=True, is_attending=None).count(),
+        'pending_guests': Guest.objects.filter(is_attending=None).count(),
         'parties_with_unopen_invites': parties_with_unopen_invites,
         'parties_with_open_unresponded_invites': parties_with_open_unresponded_invites,
         'unopened_invite_count': parties_with_unopen_invites.count(),
-        'total_invites': Party.objects.filter(is_invited=True).count(),
+        'total_invites': Party.objects.count(),
+        'drinking_guests': drinking_guests.count(),
         'category_breakdown': category_breakdown,
     })
 
@@ -128,8 +131,7 @@ def save_the_date_preview(request, template_id):
 @login_required
 def test_email(request, template_id):
     context = get_save_the_date_context(template_id)
-    send_save_the_date_email(context, ['cory.zue@gmail.com'])
-    # send_save_the_date_email(context, ['cory.zue@gmail.com', 'rowenaluk@gmail.com'])
+    send_save_the_date_email(context, ['sajarvis@bu.edu'])
     return HttpResponse('sent!')
 
 
