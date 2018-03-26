@@ -90,7 +90,7 @@ def get_template_id_from_party(partyType):
 def get_save_the_date_context(template_id):
     template_id = (template_id or '').lower()
     if template_id not in SAVE_THE_DATE_CONTEXT_MAP:
-        logger.error("How is this template not in the save the date map? {}".format(template_id))
+        #logger.error("How is this template not in the save the date map? {}".format(template_id))
         template_id = get_template_id_from_party('')
     context = copy(SAVE_THE_DATE_CONTEXT_MAP[template_id])
     context['name'] = template_id
@@ -106,7 +106,7 @@ def send_save_the_date_email(context, recipients, test_only=False):
     context['email_mode'] = True
     template_html = render_to_string(SAVE_THE_DATE_TEMPLATE, context=context)
     template_text = "Save the date for Steve and Allie's wedding! August 18, 18. River Falls, WI"
-    subject = 'Save the Date!'
+    subject = 'Save the Date for the Jarvises!'
     # https://www.vlent.nl/weblog/2014/01/15/sending-emails-with-embedded-images-in-django/
     msg = EmailMultiAlternatives(subject, template_text, 'Steve and Allie <sajarvis@bu.edu>', recipients,
                                  reply_to=['sajarvis@bu.edu'])
@@ -119,7 +119,7 @@ def send_save_the_date_email(context, recipients, test_only=False):
             msg_img.add_header('Content-ID', '<{}>'.format(filename))
             msg.attach(msg_img)
 
-    logger.information('sending {} to {}'.format(context['name'], ', '.join(recipients)))
+    print 'sending {} to {}'.format(context['name'], ', '.join(recipients))
     if not test_only:
         msg.send()
 
