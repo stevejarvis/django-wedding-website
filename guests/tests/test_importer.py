@@ -33,13 +33,6 @@ class GuestImporterTest(TestCase):
             else:
                 self.assertFalse(guest.is_child)
 
-    def test_is_invited(self):
-        for party in Party.objects.all():
-            if party.name == 'Jaime':
-                self.assertFalse(party.is_invited)
-            else:
-                self.assertTrue(party.is_invited)
-
     def test_party_type(self):
         for guest in Guest.objects.all():
             if guest.last_name == 'Stark':

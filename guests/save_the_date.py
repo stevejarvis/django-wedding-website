@@ -56,7 +56,7 @@ SAVE_THE_DATE_CONTEXT_MAP = {
     }
 
 
-def send_all_save_the_dates(test_only=False, mark_as_sent=False):
+def send_all_save_the_dates(test_only=True, mark_as_sent=False):
     to_send_to = Party.in_default_order().filter(save_the_date_sent=None)
     for party in to_send_to:
         send_save_the_date_to_party(party, test_only=test_only)
@@ -65,7 +65,7 @@ def send_all_save_the_dates(test_only=False, mark_as_sent=False):
             party.save()
 
 
-def send_save_the_date_to_party(party, test_only=False):
+def send_save_the_date_to_party(party, test_only=True):
     context = get_save_the_date_context(get_template_id_from_party(party))
     recipients = party.guest_emails
     if not recipients:
@@ -102,7 +102,7 @@ def get_save_the_date_context(template_id):
     return context
 
 
-def send_save_the_date_email(context, recipients, test_only=False):
+def send_save_the_date_email(context, recipients, test_only=True):
     context['email_mode'] = True
     template_html = render_to_string(SAVE_THE_DATE_TEMPLATE, context=context)
     template_text = "Save the date for Steve and Allie's wedding! August 18, 18. River Falls, WI"
