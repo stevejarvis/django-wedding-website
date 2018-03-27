@@ -108,8 +108,8 @@ def send_save_the_date_email(context, recipients, test_only=True):
     template_text = "Save the date for Steve and Allie's wedding! August 18, 18. River Falls, WI"
     subject = 'Save the Date for the Jarvises!'
     # https://www.vlent.nl/weblog/2014/01/15/sending-emails-with-embedded-images-in-django/
-    msg = EmailMultiAlternatives(subject, template_text, 'Steve and Allie <sajarvis@bu.edu>', recipients,
-                                 reply_to=['sajarvis@bu.edu'])
+    msg = EmailMultiAlternatives(subject, template_text, 'Steve and Allie <barneyandjolene@jarvises4.life>', recipients,
+                                 reply_to=['barneyandjolene@jarvises4.life'])
     msg.attach_alternative(template_html, "text/html")
     msg.mixed_subtype = 'related'
     for filename in (context['header_filename'], context['main_image']):
