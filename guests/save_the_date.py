@@ -15,7 +15,7 @@ SAVE_THE_DATE_CONTEXT_MAP = {
             'title': 'Kissing Booth',
             'header_filename': 'hearts.png',
             'main_image': 'kissing_booth.jpg',
-            'main_color': '#b6ccb5',
+            'main_color': '#baccde',
             'font_color': '#000000',
         },
         'petite': {
