@@ -116,7 +116,7 @@ def send_save_the_date_email(context, recipients, test_only=True):
         attachment_path = os.path.join(os.path.dirname(__file__), 'static', 'save-the-date', 'images', filename)
         with open(attachment_path, "rb") as image_file:
             msg_img = MIMEImage(image_file.read())
-            msg_img.add_header('Content-ID', '<{}>'.format(filename))
+            msg_img.add_header('Content-ID', '{}'.format(filename))
             msg.attach(msg_img)
 
     print 'sending {} to {}'.format(context['name'], ', '.join(recipients))
